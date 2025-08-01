@@ -11,6 +11,8 @@ export interface Props {
   title: string;
   content: string;
   priority: Priority;
+  // 問號 ? 表示這個屬性是「可選的」，可以省略；如果有提供，必須是 string 類型。
+  assignee?: string;
   resolved: boolean;
 }
 

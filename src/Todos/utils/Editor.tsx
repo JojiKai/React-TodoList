@@ -1,14 +1,15 @@
 import { ChangeEventHandler, FC, useRef, useState } from "react";
-import { Priority } from "./TodoItem";
+import { Priority, Props } from "./TodoItem";
 // import { kebabCase } from "lodash";
 import teamMembers from "./team-members.json";
 
-export const Editor: FC = () => {
-  const [title, setTitle] = useState<string>("");
-  const [priority, setPriority] = useState<Priority>(Priority.LOW);
-  const [assignee, setAssignee] = useState<string>("");
-  const [content, setContent] = useState<string>("");
-  const [resoleved, setResolved] = useState<boolean>(false);
+export const Editor: FC<Props> = (props) => {
+  const [title, setTitle] = useState<string>(props.title);
+  const [priority, setPriority] = useState<Priority>(props.priority);
+  // 如果左邊的值是 null 或 undefined，就回傳右邊的值；否則回傳左邊的值。
+  const [assignee, setAssignee] = useState<string>(props.assignee ?? "");
+  const [content, setContent] = useState<string>(props.content);
+  const [resoleved, setResolved] = useState<boolean>(props.resolved);
 
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
     setTitle(e.target.value);
