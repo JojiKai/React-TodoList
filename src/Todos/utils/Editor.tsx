@@ -1,16 +1,28 @@
 import { ChangeEventHandler, FC, useRef, useState } from "react";
 import { Priority } from "./TodoItem";
-import { kebabCase } from "lodash";
+// import { kebabCase } from "lodash";
+import teamMembers from "./team-members.json";
 
 export const Editor: FC = () => {
   const [title, setTitle] = useState<string>("");
   const [priority, setPriority] = useState<Priority>(Priority.LOW);
+  const [assignee, setAssignee] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [resoleved, setResolved] = useState<boolean>(false);
 
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
     setTitle(e.target.value);
-
   const handlePriorityChange: ChangeEventHandler<HTMLInputElement> = (e) =>
     setPriority(parseInt(e.target.value));
+  const handleAssigneeChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    setAssignee(e.target.value);
+  };
+  const handleContentChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    setContent(e.target.value);
+  };
+  const handleResolvedChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setResolved(!resoleved);
+  };
 
   return (
     <div className="box">
@@ -30,7 +42,7 @@ export const Editor: FC = () => {
           <div className="field">
             <div className="control">
               {Object.entries(Priority)
-                .filter(([k, v]) => isNaN(k as any))
+                .filter(([k, v]) => isNaN(Number(k)))
                 .map(([k, v]) => (
                   <label className="radio" key={k}>
                     <input
@@ -76,13 +88,18 @@ export const Editor: FC = () => {
         <div className="column has-text-right">
           <div className="field">
             <div className="control">
-              <select>
-                <option>assigned to</option>
-                <option>alex</option>
-                <option>bob</option>
-                <option>chris</option>
-                <option>david</option>
-                <option>ed</option>
+              <select value={assignee} onChange={handleAssigneeChange}>
+                <option value="">assigned to</option>
+                {teamMembers.map((m) => (
+                  <option value={m} key={m}>
+                    {m}
+                  </option>
+                ))}
+                {/* <option value="alex">alex</option>
+                <option value="bob">bob</option>
+                <option value="chris">chris</option>
+                <option value="david">david</option>
+                <option value="ed">ed</option> */}
               </select>
             </div>
           </div>
@@ -90,7 +107,12 @@ export const Editor: FC = () => {
       </div>
       <div className="field">
         <div className="control">
-          <textarea className="textarea" placeholder="content"></textarea>
+          <textarea
+            className="textarea"
+            placeholder="content"
+            value={content}
+            onChange={handleContentChange}
+          ></textarea>
         </div>
       </div>
       <div className="columns">
@@ -99,7 +121,11 @@ export const Editor: FC = () => {
           <div className="field">
             <div className="control">
               <label className="checkbox">
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  checked={resoleved}
+                  onChange={handleResolvedChange}
+                />
                 Resolved
               </label>
             </div>

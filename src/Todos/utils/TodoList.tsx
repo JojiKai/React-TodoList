@@ -9,7 +9,7 @@
 // };
 
 import { FC } from "react";
-import { getTodoItems } from "./utils/getTodoItems";
+import { getTodoItems } from "./getTodoItems";
 import { Priority, TodoItem } from "./TodoItem";
 
 export const TodoList: FC = () => {
