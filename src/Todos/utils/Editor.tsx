@@ -1,7 +1,11 @@
 import { ChangeEventHandler, FC, useRef, useState } from "react";
-import { Priority, Props } from "./TodoItem";
+import { Priority, Props as TodoItemProps } from "./TodoItem";
 // import { kebabCase } from "lodash";
 import teamMembers from "./team-members.json";
+
+interface Props extends TodoItemProps {
+  onCancel: () => void;
+}
 
 export const Editor: FC<Props> = (props) => {
   const [title, setTitle] = useState<string>(props.title);
@@ -141,7 +145,12 @@ export const Editor: FC<Props> = (props) => {
               >
                 Save
               </button>
-              <button className="button is-link is-light">Cancel</button>
+              <button
+                className="button is-link is-light"
+                onClick={props.onCancel}
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>

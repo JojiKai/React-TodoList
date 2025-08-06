@@ -1,5 +1,9 @@
-import { property } from "lodash";
-import { FC } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { assign, property } from "lodash";
+import { FC, useState } from "react";
+import { faCircleXmark, faL, faList } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { Editor } from "./Editor";
 
 export enum Priority {
   HIGH,
@@ -8,6 +12,7 @@ export enum Priority {
 }
 
 export interface Props {
+  id: string;
   title: string;
   content: string;
   priority: Priority;
@@ -16,13 +21,25 @@ export interface Props {
   resolved: boolean;
 }
 
-export const TodoItem: FC<Props> = ({ title, content, priority, resolved }) => {
+export const TodoItem: FC<Props> = ({
+  id,
+  title,
+  content,
+  priority,
+  assignee,
+  resolved,
+}) => {
+  const [editing, setEditing] = useState<boolean>(false);
+
   let color;
   if (resolved) color = "";
   else if (priority === Priority.HIGH) color = "is-danger";
   else if (priority === Priority.MEDIUM) color = "is-warning";
   else if (priority === Priority.LOW) color = "is-info";
   else color = "is-primary";
+
+  const handleEditClick = () => setEditing(true);
+  const handleCancelClick = () => setEditing(false);
 
   // const color = resolved
   // ? ""
@@ -34,13 +51,44 @@ export const TodoItem: FC<Props> = ({ title, content, priority, resolved }) => {
   // ? "is-info"
   // : "is-primary";
 
-  return (
+  return editing ? (
+    <Editor
+      {...{
+        id,
+        title,
+        content,
+        priority,
+        resolved,
+        assignee,
+        onCancel: handleCancelClick,
+      }}
+    />
+  ) : (
     <article className={`message ${color}`}>
       <div className="message-header">
         <p>{title}</p>
-        <button className="delete" aria-label="delete"></button>
+        <span>
+          <FontAwesomeIcon
+            icon={faList}
+            className="is-clickable mr-1"
+            onClick={handleEditClick}
+          />
+          <FontAwesomeIcon icon={faTrashCan} className="is-clickable" />
+        </span>
       </div>
-      <div className="message-body">{content}</div>
+      <div className="message-body">
+        <div>{content}</div>
+        <div className="columns is-mobile">
+          <div className="column is-8">
+            <span className="has-text-grey-light is-size-8">{id}</span>
+          </div>
+          <div className="column has-text-right">
+            {assignee !== undefined ? (
+              <span className="has-text-grey-light is-size-7">{`assigned to @${assignee}`}</span>
+            ) : null}
+          </div>
+        </div>
+      </div>
     </article>
   );
 };
