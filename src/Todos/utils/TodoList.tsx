@@ -24,7 +24,7 @@ export const TodoList: FC = () => {
     <div className="columns is-multtline">
       {todos.map((i) => (
         <div className="column is-2" key={i.id}>
-          <TodoItem {...i} />
+          <TodoItem {...i} updateTodo={updateTodes} />
         </div>
       ))}
     </div>

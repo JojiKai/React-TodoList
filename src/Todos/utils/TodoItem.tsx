@@ -4,6 +4,7 @@ import { FC, useState } from "react";
 import { faCircleXmark, faL, faList } from "@fortawesome/free-solid-svg-icons";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { Editor } from "./Editor";
+import { TodoItemModel } from "./getTodoItems";
 
 export enum Priority {
   HIGH,
@@ -19,6 +20,7 @@ export interface Props {
   // 問號 ? 表示這個屬性是「可選的」，可以省略；如果有提供，必須是 string 類型。
   assignee?: string;
   resolved: boolean;
+  updateTodo: (id: string, update: Partial<TodoItemModel>) => void;
 }
 
 export const TodoItem: FC<Props> = ({
@@ -28,6 +30,7 @@ export const TodoItem: FC<Props> = ({
   priority,
   assignee,
   resolved,
+  updateTodo,
 }) => {
   const [editing, setEditing] = useState<boolean>(false);
 
@@ -60,6 +63,7 @@ export const TodoItem: FC<Props> = ({
         priority,
         resolved,
         assignee,
+        updateTodo,
         onCancel: handleCancelClick,
       }}
     />

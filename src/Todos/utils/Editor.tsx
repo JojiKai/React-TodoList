@@ -13,7 +13,7 @@ export const Editor: FC<Props> = (props) => {
   // 如果左邊的值是 null 或 undefined，就回傳右邊的值；否則回傳左邊的值。
   const [assignee, setAssignee] = useState<string>(props.assignee ?? "");
   const [content, setContent] = useState<string>(props.content);
-  const [resoleved, setResolved] = useState<boolean>(props.resolved);
+  const [resolved, setResolved] = useState<boolean>(props.resolved);
 
   const handleTitleChange: ChangeEventHandler<HTMLInputElement> = (e) =>
     setTitle(e.target.value);
@@ -26,9 +26,18 @@ export const Editor: FC<Props> = (props) => {
     setContent(e.target.value);
   };
   const handleResolvedChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setResolved(!resoleved);
+    setResolved(!resolved);
   };
-
+  const handleSaveClick = () => {
+    props.updateTodo(props.id, {
+      title,
+      priority,
+      assignee,
+      content,
+      resolved,
+    });
+    props.onCancel();
+  };
   return (
     <div className="box">
       <div className="field">
@@ -128,7 +137,7 @@ export const Editor: FC<Props> = (props) => {
               <label className="checkbox">
                 <input
                   type="checkbox"
-                  checked={resoleved}
+                  checked={resolved}
                   onChange={handleResolvedChange}
                 />
                 Resolved
@@ -139,10 +148,7 @@ export const Editor: FC<Props> = (props) => {
         <div className="field">
           <div className="control">
             <div className="button has-addons">
-              <button
-                className="button is-link"
-                onClick={() => console.log(title)}
-              >
+              <button className="button is-link" onClick={handleSaveClick}>
                 Save
               </button>
               <button

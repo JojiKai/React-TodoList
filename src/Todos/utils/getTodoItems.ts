@@ -7,7 +7,7 @@ export interface TodoItemModel {
   content: string;
   priority: number;
   resolved: boolean;
-  assigne?: string;
+  assignee?: string;
   createdAt: number;
   lastModifiedAt: number;
 }
